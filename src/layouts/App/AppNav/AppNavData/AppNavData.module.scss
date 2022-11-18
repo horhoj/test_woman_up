@@ -1,0 +1,21 @@
+@import "~styles/mixins.scss";
+
+.wrap {
+  @include blockPadding;
+  display: flex;
+  flex-direction: column;
+  min-width: 300px;
+  flex-grow: 1;
+  box-shadow: var(--shadow);
+  overflow: auto;
+
+}
+
+
+.ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+}

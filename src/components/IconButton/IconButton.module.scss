@@ -1,0 +1,17 @@
+.wrap {
+  border: none;
+  cursor: pointer;
+  height: 40px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  transition: background-color 300ms;
+  background-color: rgba(255, 255, 255, 0);
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+}

@@ -1,0 +1,19 @@
+@import "~styles/settings.scss";
+
+.wrap {
+  min-height: 100vh;
+  max-width: $APP_MAX_WIDTH;
+  margin: 0 auto;
+  background-color: var(--secondary);
+  display: flex;
+  flex-direction: column;
+}
+
+.appCenterWrap {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  position: relative;
+  // max-height: calc(100vh - $HEADER_HEIGHT - $FOOTER_HEIGHT);
+  max-height: calc(100vh - $HEADER_HEIGHT);
+}

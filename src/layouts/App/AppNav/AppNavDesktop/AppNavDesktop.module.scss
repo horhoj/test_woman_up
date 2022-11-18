@@ -1,0 +1,25 @@
+.wrap {
+  display: flex;
+    // flex-direction: column;
+    // min-width: 300px;
+    // flex-grow: 0;
+    // background-color: #888;
+}
+
+.enter {
+  margin-left: -300px;
+}
+
+.enterActive {
+  margin-left: 0;
+  transition: margin-left 300ms;
+}
+
+.exit {
+  margin-left: 0;
+}
+
+.exitActive {
+  margin-left: -300px;
+  transition: margin-left 300ms;
+}

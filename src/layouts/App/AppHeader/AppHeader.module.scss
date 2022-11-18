@@ -1,0 +1,13 @@
+@import "~styles/settings.scss";
+@import "~styles/mixins.scss";
+
+.wrap {
+  @include blockPadding;
+  height: $HEADER_HEIGHT;
+  background-color: var(--primary);
+  color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+}

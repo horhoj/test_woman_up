@@ -1,0 +1,40 @@
+@import "themes";
+
+*,
+*::before,
+*::after {
+  font-family: Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  color: var(--secondary-color);
+}
+
+body {
+  background-color: var(--body-background-color);
+}
+
+.body-overflow-hidden {
+  overflow: hidden;
+}
+
+
+* {
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--white);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--primary);
+    border-radius: 20px;
+    border: 1px solid var(--white);
+  }
+}
+
+
+

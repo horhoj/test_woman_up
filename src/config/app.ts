@@ -1,0 +1,1 @@
+export const LS_KEY_IS_DARK_THEME = 'LS_KEY_IS_DARK_THEME';

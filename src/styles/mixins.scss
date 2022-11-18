@@ -1,0 +1,8 @@
+@mixin blockPadding {
+  padding: 20px 30px;
+
+  @media (max-width: 768px) {
+    padding: 10px 15px;
+  }
+
+}

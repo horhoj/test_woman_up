@@ -1,0 +1,15 @@
+@import "~styles/settings.scss";
+
+
+.wrap {
+  display: flex;
+  align-items: center;
+  background-color: var(--primary);
+  gap: 20px;
+}
+
+.logo {
+  font-size: 30px;
+  font-weight: 700;
+  color: var(--primary-color);
+}

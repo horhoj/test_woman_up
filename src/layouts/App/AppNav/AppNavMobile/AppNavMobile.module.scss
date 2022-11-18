@@ -1,0 +1,68 @@
+@import "~styles/mixins.scss";
+@import "~styles/settings.scss";
+
+.wrap {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  display: flex;
+  background-color: rgba(0, 0, 0, 0.6);
+}
+
+
+.appHeaderLeftBlockWrap {
+  @include blockPadding;
+  background-color: var(--primary);
+  height: $HEADER_HEIGHT;
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+
+.dataWrap {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background-color: var(--secondary);
+}
+
+.enter {
+  opacity: 0;
+
+  &>:local.dataWrap {
+    margin-left: -300px;
+  }
+}
+
+.enterActive {
+  opacity: 1;
+  transition: opacity 300ms;
+
+  &>:local.dataWrap {
+    margin-left: 0;
+    transition: margin-left 300ms;
+  }
+}
+
+.exit {
+  opacity: 1;
+
+  &>:local.dataWrap {
+    margin-left: 0;
+  }
+}
+
+.exitActive {
+  opacity: 0;
+  transition: opacity 300ms;
+
+  &>:local.dataWrap {
+    margin-left: -300px;
+    transition: margin-left 300ms;
+  }
+
+}
