@@ -25,6 +25,9 @@
       "@api/*": [
         "./api/*"
       ],
+      "@helpers/*": [
+        "./helpers/*"
+      ],
       "@config/*": [
         "./config/*"
       ],

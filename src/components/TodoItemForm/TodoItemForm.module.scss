@@ -1,0 +1,26 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.controlPanelWrap {
+  display: flex;
+  gap: 10px;
+}
+
+.msgError {
+  color: var(--form-validation-error-color);
+  font-size: 14px;
+}
+
+.formTitle {
+  font-weight: 500;
+  font-size: 20px;
+}

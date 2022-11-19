@@ -14,6 +14,14 @@ body {
   background-color: var(--body-background-color);
 }
 
+button, textarea, input, a {
+  outline: none;
+  &:focus {
+    //outline: 4px solid var(--primary);
+    box-shadow: var(--outline-shadow);
+  }
+}
+
 .body-overflow-hidden {
   overflow: hidden;
 }

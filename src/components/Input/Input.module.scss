@@ -1,4 +1,60 @@
+.wrap {
+  width: 100%;
+}
+
+.inputWrap {
+  position: relative;
+  width: 100%;
+}
+
+.inputDateIcon {
+  position: absolute;
+  top: 9px;
+  left: 8px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0);
+  cursor: pointer;
+  z-index: 10;
+  padding: 2px;
+  border-radius: 3px;
+
+  & > svg {
+    fill: var(--secondary-color);
+  }
+}
+
 .input {
+  height: 40px;
   padding: 10px;
   border-radius: 5px;
+  background-color: var(--secondary);
+  color: var(--secondary-color);
+  border: none;
+  box-shadow: var(--shadow);
+  width: 100%;
+
+  &::placeholder {
+    color: #B7BAC1;
+    opacity: 1;
+  }
+
+  &[type="date"] {
+    padding-left: 34px;
+  }
+
+
+  &[type="date"]::-webkit-inner-spin-button,
+  &[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  &[type="date"]::-ms-clear {
+    opacity: 0;
+    display: none;
+    visibility: hidden;
+  }
 }
+
+
+

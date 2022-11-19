@@ -6,7 +6,7 @@ export const AppHeaderLeftBlock: FC = () => {
   return (
     <div className={styles.wrap}>
       <ToggleMainMenuButton />
-      <div className={styles.logo}>REACT</div>
+      <div className={styles.logo}>СПИСОК ДЕЛ</div>
     </div>
   );
 };

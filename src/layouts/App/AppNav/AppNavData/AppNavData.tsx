@@ -25,17 +25,12 @@ export const AppNavData: FC = () => {
         onClick={handleCloseMobileNavIfLinkOrButtonIsClicked}
       >
         <li>
-          <AppNavDataLink link={getRoutePath('main')} text={'Main'} />
-        </li>
-        <li>
-          <AppNavDataLink link={getRoutePath('about')} text={'About'} />
+          <AppNavDataLink link={getRoutePath('todoList')} text={'Список дел'} />
         </li>
         <li>
           <AppNavDataLink
-            text={'Exit'}
-            onClick={() => {
-              alert('click on Exit');
-            }}
+            link={getRoutePath('about')}
+            text={'О программе...'}
           />
         </li>
       </ul>
