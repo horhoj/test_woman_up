@@ -25,9 +25,9 @@ export const TodoList: FC = () => {
     dispatch(appSlice.actions.redirect(path));
   };
 
-  const handleTodoDelete = (todoId: string) => {
+  const handleTodoDelete = (todoId: string, fileUrl: string | null) => {
     if (confirm('Delete?')) {
-      dispatch(todosSlice.thunks.deleteTodoItemThunk({ todoId }));
+      dispatch(todosSlice.thunks.deleteTodoItemThunk({ todoId, fileUrl }));
     }
   };
 
@@ -46,7 +46,7 @@ export const TodoList: FC = () => {
     <div className={styles.wrap}>
       <div>
         <Button onClick={handleTodoAdd} disabled={isLoading}>
-          add new todo
+          Добавить задачу
         </Button>
       </div>
       {todoListRequest.data && (

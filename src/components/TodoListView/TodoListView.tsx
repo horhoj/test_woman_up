@@ -8,7 +8,7 @@ import styles from './TodoListView.module.scss';
 interface TodoListViewProps {
   todoItemList: TodoItem[];
   onEdit: (todoId: string) => void;
-  onDelete: (todoId: string) => void;
+  onDelete: (todoId: string, fileUrl: string | null) => void;
   onDoneToggle: (todoId: string, newTodoBodyItem: TodoBodyItem) => void;
   disabled: boolean;
 }
@@ -57,7 +57,7 @@ export const TodoListView: FC<TodoListViewProps> = ({
                   Изменить
                 </Button>
                 <Button
-                  onClick={() => onDelete(todoItem.id)}
+                  onClick={() => onDelete(todoItem.id, todoItem.body.fileUrl)}
                   disabled={disabled}
                 >
                   Удалить
@@ -69,7 +69,9 @@ export const TodoListView: FC<TodoListViewProps> = ({
               <div
                 className={classNames(
                   styles.todoItemDeadline,
-                  isOverdue && styles.todoItemDeadlineIsOverdue,
+                  isOverdue &&
+                    !todoItem.body.done &&
+                    styles.todoItemDeadlineIsOverdue,
                 )}
               >
                 <div>Крайний срок:</div>
@@ -82,6 +84,20 @@ export const TodoListView: FC<TodoListViewProps> = ({
             <div className={styles.todoItemDescription}>
               {todoItem.body.description}
             </div>
+            {todoItem.body.fileUrl && todoItem.body.fileName ? (
+              <div>
+                <span>Вложенный файл: </span>
+                <a
+                  href={todoItem.body.fileUrl}
+                  target={'_blank'}
+                  rel="noreferrer"
+                >
+                  {todoItem.body.fileName}
+                </a>
+              </div>
+            ) : (
+              <div>нет вложенного файла</div>
+            )}
           </div>
         );
       })}

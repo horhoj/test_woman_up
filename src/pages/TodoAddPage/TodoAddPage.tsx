@@ -15,16 +15,19 @@ const INITIAL_VALUES: TodoItemFormValues = {
 };
 
 export const TodoAddPage: FC = () => {
-  const handleSubmit = (values: TodoItemFormValues) => {
+  const handleSubmit = (values: TodoItemFormValues, file: File | null) => {
+    console.log(file, file?.name);
     const todoBodyItem: TodoBodyItem = {
       title: values.title,
       description: values.description,
       done: false,
       dateOfCompletion: new Date(values.dateOfCompletion).getTime(),
       timestamp: new Date().getTime(),
+      fileUrl: null,
+      fileName: null,
     };
 
-    dispatch(todosSlice.thunks.addTodoItemThunk({ todoBodyItem }));
+    dispatch(todosSlice.thunks.addTodoItemThunk({ todoBodyItem, file }));
   };
 
   const dispatch = useAppDispatch();
@@ -41,6 +44,8 @@ export const TodoAddPage: FC = () => {
         onSubmit={handleSubmit}
         onCancel={handleCancel}
         initialValues={INITIAL_VALUES}
+        fileName={null}
+        fileUrl={null}
       />
     </div>
   );

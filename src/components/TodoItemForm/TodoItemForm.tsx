@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import { FC } from 'react';
+import { FC, useRef } from 'react';
 import * as yup from 'yup';
 import { TextArea } from '@components/TextArea';
 import { Input } from '@components/Input';
@@ -9,9 +9,11 @@ import styles from './TodoItemForm.module.scss';
 
 interface TodoItemFormProps {
   initialValues: TodoItemFormValues;
-  onSubmit(values: TodoItemFormValues): void;
+  onSubmit(values: TodoItemFormValues, file: File | null): void;
   onCancel(): void;
   formTitle: string;
+  fileUrl: string | null;
+  fileName: string | null;
 }
 
 const validationSchema = yup.object({
@@ -25,13 +27,26 @@ export const TodoItemForm: FC<TodoItemFormProps> = ({
   onSubmit,
   onCancel,
   formTitle,
+  fileUrl,
+  fileName,
 }) => {
   const formik = useFormik({
     initialValues,
-    onSubmit,
+    onSubmit: (values) => {
+      let file: File | null = null;
+      if (fileInputRef.current && fileInputRef.current.files) {
+        const currentFile = fileInputRef.current.files[0];
+        if (currentFile) {
+          file = currentFile;
+        }
+      }
+      onSubmit(values, file);
+    },
     validationSchema,
     enableReinitialize: true,
   });
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div className={styles.wrap}>
@@ -79,6 +94,24 @@ export const TodoItemForm: FC<TodoItemFormProps> = ({
             Boolean(formik.errors.description) && (
               <div className={styles.msgError}>{formik.errors.description}</div>
             )}
+        </div>
+
+        {fileUrl && fileName && (
+          <div>
+            <span>Вложенный файл: </span>
+            <a href={fileUrl} target={'_blank'} rel="noreferrer">
+              {fileName}
+            </a>
+          </div>
+        )}
+
+        <div className={styles.field}>
+          <label>Прикрепить документ</label>
+          <Input
+            type="file"
+            ref={fileInputRef}
+            placeholder={'Выберите файл...'}
+          />
         </div>
 
         <div className={styles.controlPanelWrap}>

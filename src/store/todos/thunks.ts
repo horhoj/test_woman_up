@@ -25,44 +25,52 @@ export const fetchTodoItemThunk = createAsyncThunk(
   },
 );
 
-interface PatchTodoItemThunkPayload {
-  todoBodyItem: TodoBodyItem;
-  id: string;
-}
-
-export const patchTodoItemThunk = createAsyncThunk(
-  `${SLICE_NAME}/patchTodo`,
-  async ({ todoBodyItem, id }: PatchTodoItemThunkPayload, { dispatch }) => {
-    await api.todos.patchTodo(todoBodyItem, id);
-    const path = getRoutePath('todoList');
-    dispatch(appSlice.actions.redirect(path));
-    return null;
-  },
-);
-
-interface DeleteTodoItemThunkPayload {
-  todoId: string;
-}
-
-export const deleteTodoItemThunk = createAsyncThunk(
-  `${SLICE_NAME}/deleteTodoItemThunk`,
-  async ({ todoId }: DeleteTodoItemThunkPayload, { dispatch }) => {
-    await api.todos.deleteTodo(todoId);
-    dispatch(fetchTodoListThunk());
-    return null;
-  },
-);
-
 interface AddTodoItemThunkPayload {
   todoBodyItem: TodoBodyItem;
+  file: File | null;
 }
 
 export const addTodoItemThunk = createAsyncThunk(
   `${SLICE_NAME}/addTodoItemThunk`,
-  async ({ todoBodyItem }: AddTodoItemThunkPayload, { dispatch }) => {
-    await api.todos.addTodo(todoBodyItem);
+  async ({ todoBodyItem, file }: AddTodoItemThunkPayload, { dispatch }) => {
+    let fileUrl: string | null = null;
+    let fileName: string | null = null;
+    if (file) {
+      fileUrl = await api.todos.addFile(file);
+      fileName = file.name;
+    }
+    await api.todos.addTodo({ ...todoBodyItem, fileUrl, fileName });
     const path = getRoutePath('todoList');
     dispatch(appSlice.actions.redirect(path));
+  },
+);
+
+interface PatchTodoItemThunkPayload {
+  todoBodyItem: TodoBodyItem;
+  id: string;
+  file: File | null;
+}
+
+export const patchTodoItemThunk = createAsyncThunk(
+  `${SLICE_NAME}/patchTodo`,
+  async (
+    { todoBodyItem, id, file }: PatchTodoItemThunkPayload,
+    { dispatch },
+  ) => {
+    let fileUrl: string | null = todoBodyItem.fileUrl;
+    let fileName: string | null = todoBodyItem.fileName;
+    if (file) {
+      if (fileUrl) {
+        await api.todos.deleteFile(fileUrl);
+      }
+      fileUrl = await api.todos.addFile(file);
+      fileName = file.name;
+    }
+
+    await api.todos.patchTodo({ ...todoBodyItem, fileUrl, fileName }, id);
+    const path = getRoutePath('todoList');
+    dispatch(appSlice.actions.redirect(path));
+    return null;
   },
 );
 
@@ -77,8 +85,24 @@ export const todoItemDoneToggleThunk = createAsyncThunk(
     { todoId, newTodoBodyItem }: TodoItemDoneToggleThunkPayload,
     { dispatch },
   ) => {
-    // console.log('todoItemDoneToggleThunk', todoId, newTodoBodyItem);
     await api.todos.patchTodo(newTodoBodyItem, todoId);
     dispatch(fetchTodoListThunk());
+  },
+);
+
+interface DeleteTodoItemThunkPayload {
+  todoId: string;
+  fileUrl: string | null;
+}
+
+export const deleteTodoItemThunk = createAsyncThunk(
+  `${SLICE_NAME}/deleteTodoItemThunk`,
+  async ({ todoId, fileUrl }: DeleteTodoItemThunkPayload, { dispatch }) => {
+    if (fileUrl) {
+      await api.todos.deleteFile(fileUrl);
+    }
+    await api.todos.deleteTodo(todoId);
+    dispatch(fetchTodoListThunk());
+    return null;
   },
 );

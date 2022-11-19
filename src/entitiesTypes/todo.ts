@@ -4,6 +4,8 @@ export interface TodoBodyItem {
   dateOfCompletion: number;
   done: boolean;
   timestamp: number;
+  fileUrl: string | null;
+  fileName: string | null;
 }
 
 export interface TodoItem {

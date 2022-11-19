@@ -36,7 +36,8 @@ export const TodoEditPage: FC = () => {
     dispatch(appSlice.actions.redirect(path));
   };
 
-  const handleSubmit = (values: TodoItemFormValues) => {
+  const handleSubmit = (values: TodoItemFormValues, file: File | null) => {
+    console.log(file);
     if (!fetchTodoItemRequest.data) {
       return;
     }
@@ -53,6 +54,7 @@ export const TodoEditPage: FC = () => {
       todosSlice.thunks.patchTodoItemThunk({
         todoBodyItem,
         id: fetchTodoItemRequest.data.id,
+        file,
       }),
     );
   };
@@ -65,6 +67,8 @@ export const TodoEditPage: FC = () => {
           onSubmit={handleSubmit}
           onCancel={handleCancel}
           formTitle={'Изменения дела'}
+          fileUrl={fetchTodoItemRequest.data.body.fileUrl}
+          fileName={fetchTodoItemRequest.data.body.fileName}
         />
       )}
     </div>

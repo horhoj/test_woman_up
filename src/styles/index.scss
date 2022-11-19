@@ -15,11 +15,12 @@ body {
 }
 
 button, textarea, input, a {
-  outline: none;
+  //outline: none;
   &:focus {
     //outline: 4px solid var(--primary);
-    box-shadow: var(--outline-shadow);
+    //box-shadow: var(--outline-shadow);
   }
+
 }
 
 .body-overflow-hidden {

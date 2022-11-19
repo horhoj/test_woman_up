@@ -22,6 +22,7 @@ import {
   deleteObject,
 } from 'firebase/storage';
 import { TodoBodyItem, TodoItem } from '@entitiesTypes/todo';
+import { getUUID } from '@utils/getUUID';
 
 const firebaseConfig: FirebaseOptions = {
   apiKey: 'AIzaSyC5-LKi2VTj93Ia5WMrtKyfogaY_bGgmo4',
@@ -49,7 +50,6 @@ export const fetchTodoList = async (): Promise<TodoItem[]> => {
 
 export const fetchTodoItem = async (id: string): Promise<TodoItem> => {
   const todosCol = collection(db, 'todos');
-  // const todosSnapshot = await getDocs(todosCol);
   const q = query(todosCol, where(documentId(), '==', id));
   const todosSnapshot = await getDocs(q);
 
@@ -84,4 +84,44 @@ export const patchTodo = async (
 export const deleteTodo = async (id: string) => {
   const docRef = doc(db, 'todos', id);
   await deleteDoc(docRef);
+};
+
+export const addFile = async (file: File): Promise<string> => {
+  const storageRef = ref(storage, `${getUUID()}_${file.name}`);
+  const uploadTask = uploadBytesResumable(storageRef, file);
+  return new Promise((resolve, reject) => {
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        // const percent = Math.round(
+        //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+        // );
+        //
+        // // update progress
+        // setPercent(percent);
+      },
+      (err) => reject(err),
+      () => {
+        // download url
+        getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+          resolve(url);
+        });
+      },
+    );
+  });
+};
+
+export const deleteFile = async (fileUrl: string) => {
+  try {
+    const fileRef = ref(storage, fileUrl);
+    await deleteObject(fileRef);
+  } catch (e) {
+    // Возможна ситуация когда файл уже как бы удален,
+    // но однако это не повод бросать исключение,
+    // так как мы его все равно пытаемся удалить
+    // но в консоль для порядка напишем
+
+    // eslint-disable-next-line no-console
+    console.log('error delete file', JSON.stringify(e, null, 2));
+  }
 };
