@@ -24,16 +24,27 @@ import {
 import { TodoBodyItem, TodoItem } from '@entitiesTypes/todo';
 import { getUUID } from '@utils/getUUID';
 
+//Американский сервер очень тормознутый
+
+// const firebaseConfig: FirebaseOptions = {
+//   apiKey: 'AIzaSyC5-LKi2VTj93Ia5WMrtKyfogaY_bGgmo4',
+//   projectId: 'todoproject-36ef9',
+//   storageBucket: 'todoproject-36ef9.appspot.com',
+// };
+
+//Европейский сервер побыстрее
 const firebaseConfig: FirebaseOptions = {
-  apiKey: 'AIzaSyC5-LKi2VTj93Ia5WMrtKyfogaY_bGgmo4',
-  projectId: 'todoproject-36ef9',
-  storageBucket: 'todoproject-36ef9.appspot.com',
+  apiKey: 'AIzaSyC85RSmajMqubHHrnHb-wvN614AtuKyGpU',
+  projectId: 'todo4-1a39f',
+  storageBucket: 'todo4-1a39f.appspot.com',
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const storage = getStorage(app);
+storage.maxOperationRetryTime = 2000;
+storage.maxUploadRetryTime = 2000;
 
 const todoListDataTransform = (todosSnapshot: QuerySnapshot<DocumentData>) =>
   todosSnapshot.docs.map((doc) => ({
@@ -92,7 +103,10 @@ export const addFile = async (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     uploadTask.on(
       'state_changed',
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (snapshot) => {
+        // в теории сюда можно пробросить callback и использовать его для
+        // передачи данных по состоянию загрузки файла, например в процентах
         // const percent = Math.round(
         //   (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
         // );
@@ -102,7 +116,6 @@ export const addFile = async (file: File): Promise<string> => {
       },
       (err) => reject(err),
       () => {
-        // download url
         getDownloadURL(uploadTask.snapshot.ref).then((url) => {
           resolve(url);
         });

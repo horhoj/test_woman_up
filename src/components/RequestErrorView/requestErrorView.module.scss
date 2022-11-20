@@ -1,0 +1,14 @@
+.wrap {
+  background-color: var(--alert-background-color);
+  color: var(--alert-color);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  border-radius: 5px;
+  overflow: auto;
+
+  & > pre {
+    white-space: pre-wrap;
+  }
+}

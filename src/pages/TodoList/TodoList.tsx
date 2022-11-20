@@ -6,12 +6,21 @@ import { getRoutePath } from '@router/helpers';
 import { appSlice } from '@store/app';
 import { Button } from '@components/Button';
 import { TodoBodyItem } from '@entitiesTypes/todo';
+import { RequestErrorView } from '@components/RequestErrorView';
 import styles from './TodoList.module.scss';
 
 export const TodoList: FC = () => {
   const dispatch = useAppDispatch();
-  const todoListRequest = useAppSelector(
+  const fetchListRequest = useAppSelector(
     todosSlice.selectors.getFetchTodoListRequest,
+  );
+
+  const doneToggleTodoItemRequest = useAppSelector(
+    todosSlice.selectors.getDoneToggleTodoItemRequest,
+  );
+
+  const deleteTodoItemRequest = useAppSelector(
+    todosSlice.selectors.getDeleteTodoItemRequest,
   );
 
   useEffect(() => {
@@ -49,9 +58,28 @@ export const TodoList: FC = () => {
           Добавить задачу
         </Button>
       </div>
-      {todoListRequest.data && (
+      {fetchListRequest.error && (
+        <RequestErrorView
+          requestError={fetchListRequest.error}
+          errorTitle={'Ошибка получения списка дел'}
+        />
+      )}
+      {doneToggleTodoItemRequest.error && (
+        <RequestErrorView
+          requestError={doneToggleTodoItemRequest.error}
+          errorTitle={'Ошибка переключения статуса дела'}
+        />
+      )}
+
+      {deleteTodoItemRequest.error && (
+        <RequestErrorView
+          requestError={deleteTodoItemRequest.error}
+          errorTitle={'Ошибка удаления дела'}
+        />
+      )}
+      {fetchListRequest.data && (
         <TodoListView
-          todoItemList={todoListRequest.data}
+          todoItemList={fetchListRequest.data}
           onEdit={handleTodoEdit}
           onDelete={handleTodoDelete}
           onDoneToggle={handleDoneToggle}

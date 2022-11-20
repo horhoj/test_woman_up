@@ -7,6 +7,7 @@ import { TodoBodyItem, TodoItemFormValues } from '@entitiesTypes/todo';
 import { getRoutePath } from '@router/helpers';
 import { appSlice } from '@store/app';
 import { getTodoItemFormValues } from '@helpers/todoListHelpers';
+import { RequestErrorView } from '@components/RequestErrorView';
 import styles from './TodoEditPage.module.scss';
 
 export const TodoEditPage: FC = () => {
@@ -17,6 +18,12 @@ export const TodoEditPage: FC = () => {
   const fetchTodoItemRequest = useAppSelector(
     todosSlice.selectors.getFetchTodoItemRequest,
   );
+
+  const patchTodoItemRequest = useAppSelector(
+    todosSlice.selectors.getPatchTodoItemRequest,
+  );
+
+  const isLoading = useAppSelector(todosSlice.selectors.getIsLoading);
 
   useEffect(() => {
     if (id) {
@@ -37,7 +44,6 @@ export const TodoEditPage: FC = () => {
   };
 
   const handleSubmit = (values: TodoItemFormValues, file: File | null) => {
-    console.log(file);
     if (!fetchTodoItemRequest.data) {
       return;
     }
@@ -61,6 +67,20 @@ export const TodoEditPage: FC = () => {
 
   return (
     <div className={styles.wrap}>
+      {fetchTodoItemRequest.error && (
+        <RequestErrorView
+          errorTitle={'Ошибка получения данных по делу'}
+          requestError={fetchTodoItemRequest.error}
+        />
+      )}
+
+      {patchTodoItemRequest.error && (
+        <RequestErrorView
+          errorTitle={'Ошибка изменения данных по делу'}
+          requestError={patchTodoItemRequest.error}
+        />
+      )}
+
       {fetchTodoItemRequest.data && (
         <TodoItemForm
           initialValues={getTodoItemFormValues(fetchTodoItemRequest.data.body)}
@@ -69,6 +89,7 @@ export const TodoEditPage: FC = () => {
           formTitle={'Изменения дела'}
           fileUrl={fetchTodoItemRequest.data.body.fileUrl}
           fileName={fetchTodoItemRequest.data.body.fileName}
+          disabled={isLoading}
         />
       )}
     </div>

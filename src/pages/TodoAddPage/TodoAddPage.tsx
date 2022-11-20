@@ -1,11 +1,12 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 import { TodoItemForm } from '@components/TodoItemForm';
 import { TodoBodyItem, TodoItemFormValues } from '@entitiesTypes/todo';
 import { getRoutePath } from '@router/helpers';
 import { appSlice } from '@store/app';
-import { useAppDispatch } from '@store/hooks';
+import { useAppDispatch, useAppSelector } from '@store/hooks';
 import { todosSlice } from '@store/todos';
 import { getDate } from '@utils/dateTime';
+import { RequestErrorView } from '@components/RequestErrorView';
 import styles from './TodoAddPage.module.scss';
 
 const INITIAL_VALUES: TodoItemFormValues = {
@@ -15,8 +16,27 @@ const INITIAL_VALUES: TodoItemFormValues = {
 };
 
 export const TodoAddPage: FC = () => {
+  const dispatch = useAppDispatch();
+
+  const isLoading = useAppSelector(todosSlice.selectors.getIsLoading);
+
+  const addTodoItemRequest = useAppSelector(
+    todosSlice.selectors.getAddTodoItemRequest,
+  );
+
+  useEffect(
+    () => () => {
+      dispatch(todosSlice.actions.todoItemAddPageUnmount());
+    },
+    [],
+  );
+
+  const handleCancel = () => {
+    const path = getRoutePath('todoList');
+    dispatch(appSlice.actions.redirect(path));
+  };
+
   const handleSubmit = (values: TodoItemFormValues, file: File | null) => {
-    console.log(file, file?.name);
     const todoBodyItem: TodoBodyItem = {
       title: values.title,
       description: values.description,
@@ -30,15 +50,15 @@ export const TodoAddPage: FC = () => {
     dispatch(todosSlice.thunks.addTodoItemThunk({ todoBodyItem, file }));
   };
 
-  const dispatch = useAppDispatch();
-
-  const handleCancel = () => {
-    const path = getRoutePath('todoList');
-    dispatch(appSlice.actions.redirect(path));
-  };
-
   return (
     <div className={styles.wrap}>
+      {addTodoItemRequest.error && (
+        <RequestErrorView
+          errorTitle={'Ошибка добавления нового дела'}
+          requestError={addTodoItemRequest.error}
+        />
+      )}
+
       <TodoItemForm
         formTitle={'Добавление дела'}
         onSubmit={handleSubmit}
@@ -46,6 +66,7 @@ export const TodoAddPage: FC = () => {
         initialValues={INITIAL_VALUES}
         fileName={null}
         fileUrl={null}
+        disabled={isLoading}
       />
     </div>
   );

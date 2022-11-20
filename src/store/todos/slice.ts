@@ -33,6 +33,13 @@ export const { actions, reducer } = createSlice({
     todoItemEditPageUnmount: (state) => {
       state.fetchTodoItemRequest.error = null;
       state.fetchTodoItemRequest.data = null;
+      state.patchTodoItemRequest.error = null;
+      state.patchTodoItemRequest.data = null;
+    },
+
+    todoItemAddPageUnmount: (state) => {
+      state.addTodoItemRequest.error = null;
+      state.addTodoItemRequest.data = null;
     },
   },
   extraReducers: (builder) => {

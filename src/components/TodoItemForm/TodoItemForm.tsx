@@ -14,6 +14,7 @@ interface TodoItemFormProps {
   formTitle: string;
   fileUrl: string | null;
   fileName: string | null;
+  disabled: boolean;
 }
 
 const validationSchema = yup.object({
@@ -22,6 +23,8 @@ const validationSchema = yup.object({
   dateOfCompletion: yup.string().required('Должно быть датой!!!'),
 });
 
+const MAX_FILE_SIZE = 1024 * 1024 * 5; //5 мегабайт
+
 export const TodoItemForm: FC<TodoItemFormProps> = ({
   initialValues,
   onSubmit,
@@ -29,6 +32,7 @@ export const TodoItemForm: FC<TodoItemFormProps> = ({
   formTitle,
   fileUrl,
   fileName,
+  disabled,
 }) => {
   const formik = useFormik({
     initialValues,
@@ -38,6 +42,10 @@ export const TodoItemForm: FC<TodoItemFormProps> = ({
         const currentFile = fileInputRef.current.files[0];
         if (currentFile) {
           file = currentFile;
+          if (file.size > MAX_FILE_SIZE) {
+            alert('Размер прикрепленного файла превышает 5 мегабайт!');
+            return;
+          }
         }
       }
       onSubmit(values, file);
@@ -115,9 +123,11 @@ export const TodoItemForm: FC<TodoItemFormProps> = ({
         </div>
 
         <div className={styles.controlPanelWrap}>
-          <Button type={'submit'}>save</Button>
-          <Button type={'button'} onClick={onCancel}>
-            cancel
+          <Button type={'submit'} disabled={disabled}>
+            Сохранить
+          </Button>
+          <Button type={'button'} onClick={onCancel} disabled={disabled}>
+            Отменить
           </Button>
         </div>
       </form>
